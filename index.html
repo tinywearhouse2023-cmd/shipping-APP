@@ -29,7 +29,7 @@
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
 .header { background: linear-gradient(135deg, #3d1a0e, #6b3124); color: white; padding: 20px 20px 16px; display: flex; align-items: center; gap: 14px; }
-.header-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.2); }
+.header-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
 .header h1 { font-size: 20px; font-weight: 700; }
 .header p { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
@@ -40,21 +40,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .card { background: var(–card); border-radius: var(–radius); padding: 20px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(61,26,14,0.08); border: 1px solid rgba(61,26,14,0.08); }
 .card-title { font-size: 12px; font-weight: 700; color: var(–primary); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
 
-/* Buttons - much more visible */
-.btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; transition: opacity .15s, transform .1s; text-align: center; letter-spacing: 0.01em; }
+.btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; transition: opacity .15s, transform .1s; text-align: center; }
 .btn:active { opacity: .85; transform: scale(.98); }
+.btn:disabled { opacity: 0.35; box-shadow: none; }
 .btn-primary { background: linear-gradient(135deg, #3d1a0e, #6b3124); color: white; box-shadow: 0 4px 14px rgba(61,26,14,0.35); }
 .btn-success { background: linear-gradient(135deg, #4a7c59, #5a9a6e); color: white; box-shadow: 0 4px 14px rgba(74,124,89,0.35); }
-.btn-danger { background: linear-gradient(135deg, #9b2c2c, #c53030); color: white; box-shadow: 0 4px 14px rgba(155,44,44,0.3); }
-.btn-outline { background: white; border: 2px solid #d1d5db; color: #374151; font-weight: 600; }
+.btn-outline { background: white; border: 2px solid var(–border); color: var(–text); font-weight: 600; }
 .btn + .btn { margin-top: 12px; }
-.btn:disabled { opacity: 0.4; box-shadow: none; }
 
-/* User list */
+/* Google 登入按鈕 */
+.btn-google { background: white; border: 2px solid var(–border); color: #3c4043; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
+.google-icon { width: 20px; height: 20px; }
+
+/* 登入狀態 */
+.auth-status { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px; font-size: 14px; font-weight: 600; }
+.auth-ok { background: #ecfdf5; color: #065f46; border: 1.5px solid #6ee7b7; }
+.auth-no { background: #fef3c7; color: #92400e; border: 1.5px solid #fcd34d; }
+
 .user-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 2px solid var(–border); border-radius: 14px; margin-bottom: 10px; cursor: pointer; transition: all .2s; }
 .user-item.selected { border-color: var(–primary); background: #f5ede8; box-shadow: 0 0 0 3px rgba(61,26,14,0.12); }
 .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #3d1a0e, #6b3124); color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
-.user-name { font-size: 16px; font-weight: 700; color: var(–text); }
+.user-name { font-size: 16px; font-weight: 700; }
 .user-meta { font-size: 12px; color: var(–muted); margin-top: 2px; }
 .user-del { background: #fee2e2; border: none; color: var(–danger); font-size: 16px; cursor: pointer; padding: 6px 10px; border-radius: 8px; }
 
@@ -63,12 +69,11 @@ input[type=“text”] { flex: 1; padding: 14px; border: 2px solid var(–border
 input[type=“text”]:focus { border-color: var(–primary); background: white; }
 .input-btn { padding: 14px 18px; background: var(–primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
 
-/* QR Scanner */
 #qr-video-wrap { position: relative; border-radius: 16px; overflow: hidden; background: #000; aspect-ratio: 1; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 #qr-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .scan-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .scan-frame { width: 62%; aspect-ratio: 1; border: 3px solid white; border-radius: 16px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); }
-.scan-line { position: absolute; width: 62%; height: 3px; background: linear-gradient(90deg, transparent, #a78bfa, transparent); animation: scanAnim 2s linear infinite; }
+.scan-line { position: absolute; width: 62%; height: 3px; background: linear-gradient(90deg, transparent, #d4a574, transparent); animation: scanAnim 2s linear infinite; }
 @keyframes scanAnim { 0%{top:19%} 100%{top:81%} }
 
 .qr-result { background: #ecfdf5; border: 2px solid #6ee7b7; border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; display: none; }
@@ -76,36 +81,33 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 .qr-result-label { font-size: 12px; color: var(–success); font-weight: 700; margin-bottom: 4px; }
 .qr-result-code { font-size: 17px; font-weight: 800; word-break: break-all; color: #065f46; }
 
-.info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f0ec; font-size: 14px; }
 .info-row:last-child { border-bottom: none; }
 .info-label { color: var(–muted); font-weight: 500; }
-.info-value { font-weight: 700; text-align: right; max-width: 60%; word-break: break-all; color: var(–text); }
+.info-value { font-weight: 700; text-align: right; max-width: 60%; word-break: break-all; }
 
 /* Fullscreen Record */
 #rec-fullscreen { position: relative; width: 100vw; height: 100vh; background: #000; overflow: hidden; }
 #rec-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 #rec-ui { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 30px); z-index: 10; }
 #rec-top { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; }
-.rec-indicator { display: none; align-items: center; gap: 6px; background: rgba(220,38,38,0.9); color: white; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px); }
+.rec-indicator { display: none; align-items: center; gap: 6px; background: rgba(155,44,44,0.9); color: white; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(8px); }
 .rec-indicator.show { display: flex; }
 .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: white; animation: blink 1s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 #rec-timer-display { color: white; font-size: 18px; font-weight: 800; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
 #rec-qr-top { color: white; font-size: 12px; font-weight: 600; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(8px); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
 #rec-settings { display: flex; justify-content: center; gap: 8px; padding: 8px 0; }
-.setting-btn { background: rgba(0,0,0,0.5); border: 1.5px solid rgba(255,255,255,0.4); color: white; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 700; cursor: pointer; backdrop-filter: blur(8px); transition: all .2s; }
-.setting-btn.active { background: rgba(61,26,14,0.85); border-color: #a0694a; }
-
+.setting-btn { background: rgba(0,0,0,0.5); border: 1.5px solid rgba(255,255,255,0.4); color: white; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 700; cursor: pointer; backdrop-filter: blur(8px); }
+.setting-btn.active { background: rgba(61,26,14,0.85); border-color: #d4a574; }
 #rec-bottom { display: flex; align-items: center; justify-content: space-around; padding-bottom: 10px; }
-.flip-btn { width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); color: white; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); transition: background .2s; }
+.flip-btn { width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); color: white; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); }
 .flip-btn:active { background: rgba(255,255,255,0.35); }
 .rec-shutter { width: 86px; height: 86px; border-radius: 50%; background: white; border: 5px solid rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .1s; box-shadow: 0 0 0 4px rgba(255,255,255,0.3), 0 4px 20px rgba(0,0,0,0.4); }
 .rec-shutter:active { transform: scale(.92); }
-.rec-shutter-inner { width: 60px; height: 60px; border-radius: 50%; background: var(–danger); transition: border-radius .25s, width .25s, height .25s; }
+.rec-shutter-inner { width: 60px; height: 60px; border-radius: 50%; background: #9b2c2c; transition: border-radius .25s, width .25s, height .25s; }
 .rec-shutter-inner.recording { border-radius: 10px; width: 34px; height: 34px; }
 .cancel-btn { width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); }
-.cancel-btn:active { background: rgba(255,255,255,0.35); }
 
 /* Upload queue */
 #upload-queue-btn { position: fixed; top: 14px; right: 14px; background: linear-gradient(135deg, #92622a, #b8832e); color: white; border: none; border-radius: 20px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 999; display: none; align-items: center; gap: 6px; box-shadow: 0 3px 10px rgba(146,98,42,0.4); }
@@ -113,24 +115,23 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 #upload-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; display: none; align-items: flex-end; backdrop-filter: blur(4px); }
 #upload-panel.show { display: flex; }
 #upload-panel-inner { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 24px; max-height: 65vh; overflow-y: auto; }
-#upload-panel-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; color: var(–text); }
-.upload-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f3f4f6; }
+#upload-panel-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.upload-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f3f0ec; }
 .upload-item:last-child { border-bottom: none; }
 .upload-item-info { flex: 1; }
-.upload-item-name { font-size: 15px; font-weight: 700; color: var(–text); }
+.upload-item-name { font-size: 15px; font-weight: 700; }
 .upload-item-status { font-size: 12px; color: var(–muted); margin-top: 3px; }
-.upload-item-bar { height: 5px; background: #e5e7eb; border-radius: 99px; margin-top: 7px; overflow: hidden; }
+.upload-item-bar { height: 5px; background: var(–border); border-radius: 99px; margin-top: 7px; overflow: hidden; }
 .upload-item-bar-fill { height: 100%; background: linear-gradient(90deg, #3d1a0e, #6b3124); border-radius: 99px; transition: width .3s; }
 .upload-status-icon { font-size: 22px; }
 
 .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
 
-/* API設定 - 隱藏在進階設定裡 */
-#api-section { margin-top: 8px; }
+/* API 進階設定 */
 .advanced-toggle { background: none; border: none; color: var(–muted); font-size: 13px; cursor: pointer; padding: 8px 0; display: flex; align-items: center; gap: 4px; }
 #api-fields { display: none; margin-top: 12px; }
 #api-fields.show { display: block; }
-.api-saved-badge { background: #ecfdf5; border: 1.5px solid #6ee7b7; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #065f46; font-weight: 600; margin-top: 8px; display: none; }
+.api-saved-badge { background: #ecfdf5; border: 1.5px solid #6ee7b7; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #065f46; font-weight: 600; margin-bottom: 8px; display: none; }
 .api-saved-badge.show { display: block; }
 
 #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #2c1a0e; color: white; padding: 12px 24px; border-radius: 14px; font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 9999; white-space: nowrap; max-width: 90vw; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
@@ -138,17 +139,15 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 
 .nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #f0e8e2; display: flex; padding-bottom: env(safe-area-inset-bottom); z-index: 100; box-shadow: 0 -4px 20px rgba(61,26,14,0.08); }
 .nav-btn { flex: 1; padding: 12px 0; border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(–muted); cursor: pointer; font-weight: 500; }
-.nav-btn.active { color: var(–primary); }.nav-btn span { font-size: 22px; }
-
-.section-label { font-size: 13px; font-weight: 700; color: var(–muted); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+.nav-btn.active { color: var(–primary); }
+.nav-btn span { font-size: 22px; }
 </style>
 
 </head>
 <body>
 
 <div class="header">
-<img class="header-logo" src="icon.png" alt="Logo" onerror="this.style.display='none';document.querySelector('.header-icon-fallback').style.display='block'" />
-<span class="header-icon-fallback" style="display:none;font-size:32px">📦</span>
+<img class="header-logo" src="icon.png" alt="Logo" onerror="this.style.display='none'" />
 <div>
 <h1>Tiny 出貨系統</h1>
 <p id="header-user">請先選擇使用者</p>
@@ -163,7 +162,7 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 <div id="upload-panel-inner">
 <div id="upload-panel-title">
 <span>上傳佇列</span>
-<button onclick="toggleUploadPanel()" style="background:#f3f4f6;border:none;font-size:16px;cursor:pointer;padding:6px 10px;border-radius:8px">✕</button>
+<button onclick="toggleUploadPanel()" style="background:#f3f0ec;border:none;font-size:16px;cursor:pointer;padding:6px 10px;border-radius:8px">✕</button>
 </div>
 <div id="upload-list"></div>
 </div>
@@ -173,6 +172,16 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 
 <div class="screen active" id="screen-users">
 <div class="card" style="margin-top:16px">
+<div class="card-title">🔐 Google 登入</div>
+<div id="auth-status-box" class="auth-status auth-no">⚠️ 尚未登入，請先登入 Google</div>
+<button class="btn btn-google" id="btn-google-login" onclick="googleLogin()">
+<svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+使用 Google 帳號登入
+</button>
+<button class="btn btn-outline" id="btn-google-logout" onclick="googleLogout()" style="display:none;margin-top:8px;font-size:14px;padding:10px">登出</button>
+</div>
+
+<div class="card">
 <div class="card-title">👤 使用者</div>
 <div id="user-list"></div>
 <div class="input-row">
@@ -180,8 +189,6 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 <button class="input-btn" onclick="addUser()">＋</button>
 </div>
 </div>
-
-<!-- API 設定隱藏在進階 -->
 
 <div id="api-section">
 <button class="advanced-toggle" onclick="toggleApiFields()">⚙️ 進階設定 <span id="api-toggle-arrow">▼</span></button>
@@ -259,9 +266,9 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 <div class="screen" id="screen-done">
 <div style="margin-top:50px; text-align:center; padding: 0 20px">
 <div style="font-size:80px;margin-bottom:16px">✅</div>
-<h2 style="font-size:26px;margin-bottom:8px;color:var(--text)">已記錄！</h2>
+<h2 style="font-size:26px;margin-bottom:8px;">已記錄！</h2>
 <p style="color:var(--muted);margin-bottom:4px;font-size:15px">影片上傳在背景進行</p>
-<p style="color:var(--muted);font-size:13px;margin-bottom:28px">點右上角橘色按鈕查看進度</p>
+<p style="color:var(--muted);font-size:13px;margin-bottom:28px">點右上角查看進度</p>
 <div class="card" style="text-align:left">
 <div class="info-row"><span class="info-label">貨物編號</span><span class="info-value" id="done-qr">—</span></div>
 <div class="info-row"><span class="info-label">使用者</span><span class="info-value" id="done-user">—</span></div>
@@ -282,21 +289,34 @@ input[type=“text”]:focus { border-color: var(–primary); background: white;
 </nav>
 <div id="toast"></div>
 
+<!-- Google Identity Services -->
+
+<script src="https://accounts.google.com/gsi/client" async></script>
+
 <script>
+// ══ 設定 ══
+const CLIENT_ID = "258692536148-q7ljejm7jgjrsrajvsjv7ki40urgcffi.apps.googleusercontent.com";
+const FOLDER_ID = "1111OrHlP6FCevN8QY-V5y8BjSPYOa1H2";
+const SCOPES = "https://www.googleapis.com/auth/drive.file";
+
 let state = {
 currentUser: localStorage.getItem("currentUser") || null,
 scannedCode: null, scannedTime: null, currentRowId: null,
 apiUrl: localStorage.getItem("apiUrl") || "",
 facingMode: "environment", quality: "720p", fps: 30,
+accessToken: null,
 };
 let uploadQueue = [];
+let tokenClient = null;
 
+// ══ Toast ══
 function toast(msg, duration = 3000) {
 const el = document.getElementById("toast");
 el.textContent = msg; el.classList.add("show");
 setTimeout(() => el.classList.remove("show"), duration);
 }
 
+// ══ 畫面切換 ══
 function showScreen(name) {
 document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
 document.getElementById("screen-" + name).classList.add("active");
@@ -308,33 +328,82 @@ if (name === "scan") initQRScanner();
 if (name === "record") initRecordCamera();
 }
 
-// ══ API 設定 UI ══
+// ══ Google OAuth ══
+function initGoogleAuth() {
+if (!window.google) { setTimeout(initGoogleAuth, 500); return; }
+tokenClient = google.accounts.oauth2.initTokenClient({
+client_id: CLIENT_ID,
+scope: SCOPES,
+callback: (resp) => {
+if (resp.error) { toast("❌ 登入失敗：" + resp.error); return; }
+state.accessToken = resp.access_token;
+localStorage.setItem("gAccessToken", resp.access_token);
+updateAuthUI(true);
+toast("✅ Google 登入成功！");
+},
+});
+
+// 嘗試用存好的 token
+const saved = localStorage.getItem("gAccessToken");
+if (saved) {
+state.accessToken = saved;
+updateAuthUI(true);
+}
+}
+
+function googleLogin() {
+if (!tokenClient) { toast("Google 載入中，請稍候…"); return; }
+tokenClient.requestAccessToken();
+}
+
+function googleLogout() {
+if (state.accessToken) google.accounts.oauth2.revoke(state.accessToken);
+state.accessToken = null;
+localStorage.removeItem("gAccessToken");
+updateAuthUI(false);
+toast("已登出 Google");
+}
+
+function updateAuthUI(loggedIn) {
+const box = document.getElementById("auth-status-box");
+const loginBtn = document.getElementById("btn-google-login");
+const logoutBtn = document.getElementById("btn-google-logout");
+if (loggedIn) {
+box.className = "auth-status auth-ok";
+box.textContent = "✅ Google 已登入，可以上傳影片";
+loginBtn.style.display = "none";
+logoutBtn.style.display = "block";
+} else {
+box.className = "auth-status auth-no";
+box.textContent = "⚠️ 尚未登入，請先登入 Google";
+loginBtn.style.display = "flex";
+logoutBtn.style.display = "none";
+}
+}
+
+// ══ API 設定 ══
 function toggleApiFields() {
 const fields = document.getElementById("api-fields");
 const arrow = document.getElementById("api-toggle-arrow");
 fields.classList.toggle("show");
 arrow.textContent = fields.classList.contains("show") ? "▲" : "▼";
 }
-
 function showApiInput() {
 document.getElementById("api-url-input").style.display = "block";
 document.getElementById("api-save-btn").style.display = "block";
 document.getElementById("api-change-btn").style.display = "none";
 document.getElementById("api-url-input").value = state.apiUrl;
 }
-
 function saveApiUrl() {
 const url = document.getElementById("api-url-input").value.trim();
-if (!url.startsWith("https://")) return toast("請輸入正確的 https:// 網址");
-state.apiUrl = url;
-localStorage.setItem("apiUrl", url);
+if (!url.startsWith("https://")) return toast("請輸入正確的網址");
+state.apiUrl = url; localStorage.setItem("apiUrl", url);
 document.getElementById("api-url-input").style.display = "none";
 document.getElementById("api-save-btn").style.display = "none";
 document.getElementById("api-change-btn").style.display = "block";
 document.getElementById("api-saved-badge").classList.add("show");
 toast("✅ API 網址已儲存");
 }
-
 function initApiUI() {
 if (state.apiUrl) {
 document.getElementById("api-saved-badge").classList.add("show");
@@ -342,7 +411,6 @@ document.getElementById("api-url-input").style.display = "none";
 document.getElementById("api-save-btn").style.display = "none";
 document.getElementById("api-change-btn").style.display = "block";
 } else {
-document.getElementById("api-saved-badge").classList.remove("show");
 document.getElementById("api-url-input").style.display = "block";
 document.getElementById("api-save-btn").style.display = "block";
 document.getElementById("api-change-btn").style.display = "none";
@@ -353,71 +421,54 @@ document.getElementById("api-fields").classList.add("show");
 // ══ 使用者 ══
 function getUsers() { return JSON.parse(localStorage.getItem("users") || "[]"); }
 function saveUsers(u) { localStorage.setItem("users", JSON.stringify(u)); }
-
 function renderUsers() {
 const users = getUsers();
 const list = document.getElementById("user-list");
 list.innerHTML = "";
-if (!users.length) {
-list.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">尚無使用者，請新增</p>';
-return;
-}
+if (!users.length) { list.innerHTML = '<p style="color:var(--muted);font-size:14px;margin-bottom:12px">尚無使用者，請新增</p>'; return; }
 users.forEach(u => {
 const div = document.createElement("div");
 div.className = "user-item" + (state.currentUser === u ? " selected" : "");
 div.innerHTML = `
 <div style="display:flex;align-items:center">
 <div class="user-avatar">${u[0].toUpperCase()}</div>
-<div>
-<div class="user-name">${u}</div>
-<div class="user-meta">${state.currentUser === u ? "✅ 目前使用中" : "點擊選擇"}</div>
-</div>
+<div><div class="user-name">${u}</div><div class="user-meta">${state.currentUser === u ? "✅ 目前使用中" : "點擊選擇"}</div></div>
 </div>
 <button class="user-del" onclick="deleteUser('${u}',event)">🗑</button>`;
 div.onclick = () => selectUser(u);
 list.appendChild(div);
 });
 }
-
 function selectUser(name) {
-state.currentUser = name;
-localStorage.setItem("currentUser", name);
+state.currentUser = name; localStorage.setItem("currentUser", name);
 document.getElementById("header-user").textContent = "使用者：" + name;
 document.getElementById("scan-user-display").textContent = name;
-renderUsers();
-toast("已選擇：" + name);
+renderUsers(); toast("已選擇：" + name);
 }
-
 function addUser() {
 const input = document.getElementById("new-user-input");
 const name = input.value.trim();
 if (!name) return toast("請輸入使用者名稱");
 const users = getUsers();
 if (users.includes(name)) return toast("使用者已存在");
-users.push(name); saveUsers(users);
-input.value = ""; renderUsers(); selectUser(name);
+users.push(name); saveUsers(users); input.value = ""; renderUsers(); selectUser(name);
 }
-
 function deleteUser(name, e) {
 e.stopPropagation();
 if (!confirm(`確定刪除「${name}」？`)) return;
 saveUsers(getUsers().filter(u => u !== name));
-if (state.currentUser === name) {
-state.currentUser = null; localStorage.removeItem("currentUser");
-document.getElementById("header-user").textContent = "請先選擇使用者";
-}
+if (state.currentUser === name) { state.currentUser = null; localStorage.removeItem("currentUser"); document.getElementById("header-user").textContent = "請先選擇使用者"; }
 renderUsers();
 }
-
 function goToScan() {
 if (!state.currentUser) return toast("⚠️ 請先選擇使用者");
-if (!state.apiUrl) return toast("⚠️ 請先設定 API 網址（點進階設定）");
+if (!state.apiUrl) return toast("⚠️ 請先設定 API 網址");
+if (!state.accessToken) return toast("⚠️ 請先登入 Google");
 showScreen("scan");
 }
 
 // ══ QR 掃描 ══
 let qrStream = null, qrInterval = null, qrDetected = false;
-
 async function initQRScanner() {
 qrDetected = false;
 document.getElementById("qr-result").classList.remove("show");
@@ -431,31 +482,27 @@ qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "env
 const video = document.getElementById("qr-video");
 video.srcObject = qrStream; video.play();
 clearInterval(qrInterval);
-const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
 qrInterval = setInterval(() => {
 if (qrDetected || video.readyState !== video.HAVE_ENOUGH_DATA) return;
 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
 ctx.drawImage(video, 0, 0);
-const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+const code = jsQR(ctx.getImageData(0,0,canvas.width,canvas.height).data, canvas.width, canvas.height);
 if (code) { qrDetected = true; onQRDetected(code.data); }
 }, 300);
 } catch(err) { toast("無法開啟相機：" + err.message); }
 }
-
 function onQRDetected(code) {
-state.scannedCode = code;
-state.scannedTime = new Date().toLocaleString("zh-TW");
+state.scannedCode = code; state.scannedTime = new Date().toLocaleString("zh-TW");
 state.currentRowId = "R" + Date.now();
 document.getElementById("qr-result").classList.add("show");
 document.getElementById("qr-code-display").textContent = code;
 document.getElementById("scan-qr-display").textContent = code;
 document.getElementById("scan-time-display").textContent = state.scannedTime;
 document.getElementById("btn-confirm-scan").disabled = false;
-if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+if (navigator.vibrate) navigator.vibrate([100,50,100]);
 toast("✅ 掃描成功！");
 }
-
 function resetScan() {
 qrDetected = false;
 document.getElementById("qr-result").classList.remove("show");
@@ -464,7 +511,6 @@ document.getElementById("scan-qr-display").textContent = "等待掃描…";
 document.getElementById("scan-time-display").textContent = "—";
 state.scannedCode = null;
 }
-
 async function confirmScan() {
 if (!state.scannedCode) return;
 toast("記錄中…");
@@ -473,21 +519,25 @@ const res = await fetch(state.apiUrl, {
 method: "POST",
 body: JSON.stringify({ action: "addRecord", user: state.currentUser, qrCode: state.scannedCode, timestamp: state.scannedTime, rowId: state.currentRowId }),
 });
-const data = await res.json();
-if (!data.success) throw new Error(data.error);
+const text = await res.text();
+let data;
+try { data = JSON.parse(text); } catch(e) { throw new Error("回傳格式錯誤"); }
+if (!data.success) throw new Error(data.error || "未知錯誤");
 toast("✅ 已記錄！前往錄影");
 stopQRScanner();
 showScreen("record");
 document.getElementById("rec-qr-top").textContent = state.scannedCode;
-} catch(err) { toast("❌ 記錄失敗：" + err.message); }
+} catch(err) { toast("❌ " + err.message, 5000); }
 }
-
 function stopQRScanner() {
 clearInterval(qrInterval);
 if (qrStream) { qrStream.getTracks().forEach(t => t.stop()); qrStream = null; }
 }
 
-// ══ 錄影設定 ══
+// ══ 錄影 ══
+let recStream = null, mediaRecorder = null, recChunks = [];
+let recTimerInterval = null, recSeconds = 0, isRecording = false;
+
 function setQuality(q) {
 state.quality = q;
 document.getElementById("btn-720p").classList.toggle("active", q === "720p");
@@ -500,36 +550,25 @@ document.getElementById("btn-30fps").classList.toggle("active", fps === 30);
 document.getElementById("btn-60fps").classList.toggle("active", fps === 60);
 if (!isRecording) initRecordCamera();
 }
-
-// ══ 錄影 ══
-let recStream = null, mediaRecorder = null, recChunks = [];
-let recTimerInterval = null, recSeconds = 0, isRecording = false;
-
-function getVideoConstraints() {
-const h = state.quality === "1080p" ? 1080 : 720;
-const w = state.quality === "1080p" ? 1920 : 1280;
-return { facingMode: state.facingMode, width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: state.fps } };
-}
-
 async function initRecordCamera() {
 try {
 if (recStream) recStream.getTracks().forEach(t => t.stop());
-recStream = await navigator.mediaDevices.getUserMedia({ video: getVideoConstraints(), audio: true });
+const h = state.quality === "1080p" ? 1080 : 720;
+const w = state.quality === "1080p" ? 1920 : 1280;
+recStream = await navigator.mediaDevices.getUserMedia({
+video: { facingMode: state.facingMode, width: {ideal:w}, height: {ideal:h}, frameRate: {ideal:state.fps} },
+audio: true,
+});
 const video = document.getElementById("rec-video");
 video.srcObject = recStream; video.play();
 } catch(err) { toast("無法開啟相機：" + err.message); }
 }
-
 async function flipCamera() {
 state.facingMode = state.facingMode === "environment" ? "user" : "environment";
 await initRecordCamera();
 toast(state.facingMode === "environment" ? "後鏡頭" : "前鏡頭");
 }
-
-function toggleRecording() {
-if (!isRecording) startRecording(); else stopRecording();
-}
-
+function toggleRecording() { if (!isRecording) startRecording(); else stopRecording(); }
 function startRecording() {
 if (!recStream) return toast("相機未就緒");
 recChunks = []; recSeconds = 0; isRecording = true;
@@ -550,81 +589,118 @@ const s = String(recSeconds%60).padStart(2,"0");
 document.getElementById("rec-timer-display").textContent = `${m}:${s}`;
 }, 1000);
 }
-
 function stopRecording() {
-isRecording = false;
-clearInterval(recTimerInterval);
+isRecording = false; clearInterval(recTimerInterval);
 document.getElementById("rec-indicator").classList.remove("show");
 document.getElementById("rec-shutter-inner").classList.remove("recording");
 document.querySelectorAll(".setting-btn").forEach(b => b.style.opacity = "1");
 if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
 }
-
 async function handleRecordingStop() {
 const mimeType = recChunks[0]?.type || "video/mp4";
 const ext = mimeType.includes("mp4") ? "mp4" : "webm";
 const blob = new Blob(recChunks, { type: mimeType });
 const job = { id: state.currentRowId, qrCode: state.scannedCode, status: "uploading", progress: 0, blob, mimeType, ext };
-uploadQueue.push(job);
-updateUploadQueueUI();
-uploadInBackground(job);
+uploadQueue.push(job); updateUploadQueueUI();
+uploadToDrive(job);
 document.getElementById("done-qr").textContent = state.scannedCode;
 document.getElementById("done-user").textContent = state.currentUser;
 document.getElementById("done-time").textContent = state.scannedTime;
 const badge = document.getElementById("done-video-badge");
 badge.textContent = "⏳ 上傳中"; badge.style.background = "#fef3c7"; badge.style.color = "#92400e";
-stopRecordStream();
-showScreen("done");
+stopRecordStream(); showScreen("done");
 }
 
-// ══ 分塊上傳（縮小到 200KB 安全範圍）══
-const CHUNK_SIZE = 200 * 1024;
-
-async function uploadInBackground(job) {
+// ══ 直接上傳到 Google Drive（Resumable Upload）══
+async function uploadToDrive(job) {
 try {
-const arrayBuffer = await job.blob.arrayBuffer();
-const bytes = new Uint8Array(arrayBuffer);
-const chunks = [];
-for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
-const slice = bytes.subarray(i, i + CHUNK_SIZE);
-let binary = "";
-for (let j = 0; j < slice.length; j++) binary += String.fromCharCode(slice[j]);
-chunks.push(btoa(binary));
-}
-const totalChunks = chunks.length;
-job.progress = 3; updateUploadQueueUI();
+if (!state.accessToken) throw new Error("請先登入 Google");
 
-for (let i = 0; i < totalChunks; i++) {
-let retries = 3;
-while (retries > 0) {
-try {
-const res = await fetch(state.apiUrl, {
+const safeQR = job.qrCode.replace(/[\/\\?%*:|"<>]/g, "_");
+const fileName = `${safeQR}.${job.ext}`;
+
+// Step 1: 建立 resumable upload session
+const initRes = await fetch(
+`https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable`,
+{
 method: "POST",
-body: JSON.stringify({ action: "uploadChunk", rowId: job.id, chunkIndex: i, totalChunks, chunkData: chunks[i], mimeType: job.mimeType, qrCode: job.qrCode, ext: job.ext }),
+headers: {
+"Authorization": `Bearer ${state.accessToken}`,
+"Content-Type": "application/json",
+"X-Upload-Content-Type": job.mimeType,
+"X-Upload-Content-Length": job.blob.size,
+},
+body: JSON.stringify({
+name: fileName,
+parents: [FOLDER_ID],
+}),
+}
+);
+
+if (initRes.status === 401) {
+// Token 過期，重新登入
+state.accessToken = null;
+localStorage.removeItem("gAccessToken");
+updateAuthUI(false);
+throw new Error("Google 登入已過期，請重新登入");
+}
+if (!initRes.ok) throw new Error("建立上傳失敗：" + initRes.status);
+
+const uploadUrl = initRes.headers.get("Location");
+job.progress = 5; updateUploadQueueUI();
+
+// Step 2: 分塊上傳（每塊 5MB）
+const CHUNK = 5 * 1024 * 1024;
+let offset = 0;
+while (offset < job.blob.size) {
+const end = Math.min(offset + CHUNK, job.blob.size);
+const chunk = job.blob.slice(offset, end);
+const chunkRes = await fetch(uploadUrl, {
+method: "PUT",
+headers: {
+"Content-Range": `bytes ${offset}-${end-1}/${job.blob.size}`,
+"Content-Type": job.mimeType,
+},
+body: chunk,
 });
-const data = await res.json();
-if (!data.success) throw new Error(data.error);
-break;
-} catch(e) {
-retries--;
-if (retries === 0) throw e;
-await new Promise(r => setTimeout(r, 1500));
+if (chunkRes.status !== 200 && chunkRes.status !== 201 && chunkRes.status !== 308) {
+throw new Error("上傳中斷：" + chunkRes.status);
 }
-}
-job.progress = Math.round(3 + (i + 1) / totalChunks * 87);
+offset = end;
+job.progress = Math.round(5 + (offset / job.blob.size) * 85);
 updateUploadQueueUI();
 }
 
 job.progress = 92; updateUploadQueueUI();
-const finalRes = await fetch(state.apiUrl, {
-method: "POST",
-body: JSON.stringify({ action: "finalizeUpload", rowId: job.id }),
-});
-const finalData = await finalRes.json();
-if (!finalData.success) throw new Error(finalData.error);
 
-job.status = "done"; job.progress = 100;
-updateUploadQueueUI();
+// Step 3: 設定分享權限
+const fileId = (await (await fetch(`https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable`, { method: "POST" })).json()).id;
+
+// 從最後一個 chunk response 取得 file ID
+const listRes = await fetch(
+`https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${FOLDER_ID}' in parents&fields=files(id)&orderBy=createdTime desc&pageSize=1`,
+{ headers: { "Authorization": `Bearer ${state.accessToken}` } }
+);
+const listData = await listRes.json();
+const driveFileId = listData.files?.[0]?.id;
+
+if (driveFileId) {
+await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}/permissions`, {
+method: "POST",
+headers: { "Authorization": `Bearer ${state.accessToken}`, "Content-Type": "application/json" },
+body: JSON.stringify({ role: "reader", type: "anyone" }),
+});
+
+const videoUrl = `https://drive.google.com/file/d/${driveFileId}/view`;
+
+// Step 4: 更新 Sheet
+await fetch(state.apiUrl, {
+method: "POST",
+body: JSON.stringify({ action: "updateVideoUrl", rowId: job.id, videoUrl }),
+});
+}
+
+job.status = "done"; job.progress = 100; updateUploadQueueUI();
 toast("✅ " + job.qrCode + " 上傳完成！");
 if (document.getElementById("done-qr").textContent === job.qrCode) {
 const badge = document.getElementById("done-video-badge");
@@ -632,7 +708,7 @@ badge.textContent = "✅ 已上傳"; badge.style.background = "#ecfdf5"; badge.s
 }
 } catch(err) {
 job.status = "error"; updateUploadQueueUI();
-toast("❌ " + job.qrCode + " 失敗：" + err.message, 4000);
+toast("❌ " + job.qrCode + "：" + err.message, 5000);
 }
 }
 
@@ -645,7 +721,7 @@ const list = document.getElementById("upload-list");
 list.innerHTML = "";
 [...uploadQueue].reverse().forEach(job => {
 const icon = job.status === "done" ? "✅" : job.status === "error" ? "❌" : "⬆️";
-const statusText = job.status === "done" ? "上傳完成" : job.status === "error" ? "上傳失敗，請重試" : `上傳中 ${job.progress}%`;
+const statusText = job.status === "done" ? "上傳完成" : job.status === "error" ? "上傳失敗" : `上傳中 ${job.progress}%`;
 const div = document.createElement("div");
 div.className = "upload-item";
 div.innerHTML = `
@@ -662,23 +738,19 @@ list.appendChild(div);
 function toggleUploadPanel() { document.getElementById("upload-panel").classList.toggle("show"); }
 function closeUploadPanel(e) { if (e.target === document.getElementById("upload-panel")) toggleUploadPanel(); }
 function stopRecordStream() { if (recStream) { recStream.getTracks().forEach(t => t.stop()); recStream = null; } }
-
 function cancelRecord() {
 if (isRecording) stopRecording(); else stopRecordStream();
 document.getElementById("rec-indicator").classList.remove("show");
 document.getElementById("rec-shutter-inner").classList.remove("recording");
 showScreen("scan"); resetScan(); initQRScanner();
 }
-
 function startOver() {
 state.scannedCode = null; state.scannedTime = null; state.currentRowId = null;
 showScreen("scan"); resetScan(); initQRScanner();
 }
-
 function loadScript(src) {
 return new Promise((res, rej) => {
-const s = document.createElement("script");
-s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s);
+const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s);
 });
 }
 
@@ -687,8 +759,8 @@ if (state.currentUser) {
 document.getElementById("header-user").textContent = "使用者：" + state.currentUser;
 document.getElementById("scan-user-display").textContent = state.currentUser;
 }
-initApiUI();
-renderUsers();
+initApiUI(); renderUsers();
+window.addEventListener("load", initGoogleAuth);
 })();
 </script>
 
