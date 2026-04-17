@@ -611,7 +611,7 @@ badge.textContent = "⏳ 上傳中"; badge.style.background = "#fef3c7"; badge.s
 stopRecordStream(); showScreen("done");
 }
 
-// ══ 直接上傳到 Google Drive（Resumable Upload）══
+// ══ 直接上傳到 Google Drive（Multipart Upload）══
 async function uploadToDrive(job) {
 try {
 if (!state.accessToken) throw new Error("請先登入 Google");
@@ -619,86 +619,74 @@ if (!state.accessToken) throw new Error("請先登入 Google");
 const safeQR = job.qrCode.replace(/[\/\\?%*:|"<>]/g, "_");
 const fileName = `${safeQR}.${job.ext}`;
 
-// Step 1: 建立 resumable upload session
-const initRes = await fetch(
-`https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable`,
+job.progress = 10; updateUploadQueueUI();
+
+// Multipart upload - metadata + file in one request
+const metadata = { name: fileName, parents: [FOLDER_ID] };
+const boundary = "foo_bar_baz";
+const metaPart = `--${boundary}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(metadata)}\r\n`;
+const endPart = `\r\n--${boundary}--`;
+
+const metaBytes = new TextEncoder().encode(metaPart);
+const endBytes = new TextEncoder().encode(endPart);
+const fileBytes = new Uint8Array(await job.blob.arrayBuffer());
+
+const body = new Uint8Array(metaBytes.length + fileBytes.length + endBytes.length + (`\r\n--${boundary}\r\nContent-Type: ${job.mimeType}\r\n\r\n`).length);
+const middlePart = new TextEncoder().encode(`\r\n--${boundary}\r\nContent-Type: ${job.mimeType}\r\n\r\n`);
+
+let offset = 0;
+body.set(metaBytes, offset); offset += metaBytes.length;
+body.set(middlePart, offset); offset += middlePart.length;
+body.set(fileBytes, offset); offset += fileBytes.length;
+body.set(endBytes, offset);
+
+job.progress = 30; updateUploadQueueUI();
+
+const uploadRes = await fetch(
+"https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id",
 {
 method: "POST",
 headers: {
 "Authorization": `Bearer ${state.accessToken}`,
-"Content-Type": "application/json",
-"X-Upload-Content-Type": job.mimeType,
-"X-Upload-Content-Length": job.blob.size,
+"Content-Type": `multipart/related; boundary=${boundary}`,
 },
-body: JSON.stringify({
-name: fileName,
-parents: [FOLDER_ID],
-}),
+body: body,
 }
 );
 
-if (initRes.status === 401) {
-// Token 過期，重新登入
+if (uploadRes.status === 401) {
 state.accessToken = null;
 localStorage.removeItem("gAccessToken");
 updateAuthUI(false);
 throw new Error("Google 登入已過期，請重新登入");
 }
-if (!initRes.ok) throw new Error("建立上傳失敗：" + initRes.status);
-
-const uploadUrl = initRes.headers.get("Location");
-job.progress = 5; updateUploadQueueUI();
-
-// Step 2: 分塊上傳（每塊 5MB）
-const CHUNK = 5 * 1024 * 1024;
-let offset = 0;
-while (offset < job.blob.size) {
-const end = Math.min(offset + CHUNK, job.blob.size);
-const chunk = job.blob.slice(offset, end);
-const chunkRes = await fetch(uploadUrl, {
-method: "PUT",
-headers: {
-"Content-Range": `bytes ${offset}-${end-1}/${job.blob.size}`,
-"Content-Type": job.mimeType,
-},
-body: chunk,
-});
-if (chunkRes.status !== 200 && chunkRes.status !== 201 && chunkRes.status !== 308) {
-throw new Error("上傳中斷：" + chunkRes.status);
-}
-offset = end;
-job.progress = Math.round(5 + (offset / job.blob.size) * 85);
-updateUploadQueueUI();
+if (!uploadRes.ok) {
+const errText = await uploadRes.text();
+throw new Error("上傳失敗：" + uploadRes.status + " " + errText.substring(0, 80));
 }
 
-job.progress = 92; updateUploadQueueUI();
+const fileData = await uploadRes.json();
+const driveFileId = fileData.id;
+job.progress = 85; updateUploadQueueUI();
 
-// Step 3: 設定分享權限
-const fileId = (await (await fetch(`https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable`, { method: "POST" })).json()).id;
-
-// 從最後一個 chunk response 取得 file ID
-const listRes = await fetch(
-`https://www.googleapis.com/drive/v3/files?q=name='${fileName}' and '${FOLDER_ID}' in parents&fields=files(id)&orderBy=createdTime desc&pageSize=1`,
-{ headers: { "Authorization": `Bearer ${state.accessToken}` } }
-);
-const listData = await listRes.json();
-const driveFileId = listData.files?.[0]?.id;
-
-if (driveFileId) {
+// 設定分享權限
 await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}/permissions`, {
 method: "POST",
-headers: { "Authorization": `Bearer ${state.accessToken}`, "Content-Type": "application/json" },
+headers: {
+"Authorization": `Bearer ${state.accessToken}`,
+"Content-Type": "application/json"
+},
 body: JSON.stringify({ role: "reader", type: "anyone" }),
 });
 
 const videoUrl = `https://drive.google.com/file/d/${driveFileId}/view`;
+job.progress = 95; updateUploadQueueUI();
 
-// Step 4: 更新 Sheet
+// 更新 Sheet
 await fetch(state.apiUrl, {
 method: "POST",
 body: JSON.stringify({ action: "updateVideoUrl", rowId: job.id, videoUrl }),
 });
-}
 
 job.status = "done"; job.progress = 100; updateUploadQueueUI();
 toast("✅ " + job.qrCode + " 上傳完成！");
@@ -708,7 +696,7 @@ badge.textContent = "✅ 已上傳"; badge.style.background = "#ecfdf5"; badge.s
 }
 } catch(err) {
 job.status = "error"; updateUploadQueueUI();
-toast("❌ " + job.qrCode + "：" + err.message, 5000);
+toast("❌ " + job.qrCode + "：" + err.message, 6000);
 }
 }
 
