@@ -303,7 +303,7 @@ let state = {
 currentUser: localStorage.getItem("currentUser") || null,
 scannedCode: null, scannedTime: null, currentRowId: null,
 apiUrl: localStorage.getItem("apiUrl") || "",
-facingMode: "environment", quality: "720p", fps: 30,
+facingMode: "user", quality: "720p", fps: 30,
 accessToken: null,
 };
 let uploadQueue = [];
@@ -478,7 +478,7 @@ document.getElementById("scan-time-display").textContent = "—";
 if (!window.jsQR) await loadScript("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js");
 try {
 if (qrStream) qrStream.getTracks().forEach(t => t.stop());
-qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
 const video = document.getElementById("qr-video");
 video.srcObject = qrStream; video.play();
 clearInterval(qrInterval);
