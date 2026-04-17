@@ -6,318 +6,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>出貨掃描系統</title>
+<meta name="apple-mobile-web-app-title" content="Tiny出貨" />
+<link rel="apple-touch-icon" href="icon.png" />
+<link rel="icon" href="icon.png" />
+<title>Tiny出貨系統</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-–primary: #2563eb;
-–success: #16a34a;
-–danger: #dc2626;
-–warn: #d97706;
-–bg: #f1f5f9;
-–card: #ffffff;
-–text: #0f172a;
-–muted: #64748b;
-–border: #e2e8f0;
-–radius: 16px;
+--primary: #2563eb; --success: #16a34a;
+--danger: #dc2626; --warn: #d97706;
+--bg: #f1f5f9; --card: #fff;
+--text: #0f172a; --muted: #64748b;
+--border: #e2e8f0; --radius: 16px;
 }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-body {
-font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, sans-serif;
-background: var(–bg);
-color: var(–text);
-min-height: 100vh;
-}
-
-.header {
-background: var(–primary);
-color: white;
-padding: 20px 20px 16px;
-display: flex;
-align-items: center;
-gap: 12px;
-}
+/* Header */
+.header { background: var(–primary); color: white; padding: 20px 20px 16px; display: flex; align-items: center; gap: 12px; }
 .header-icon { font-size: 28px; }
 .header h1 { font-size: 20px; font-weight: 700; }
 .header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
 
+/* Screens */
 .screen { display: none; padding: 20px; padding-bottom: 90px; }
 .screen.active { display: block; }
 #screen-record.active { display: block; padding: 0; }
 
-.card {
-background: var(–card);
-border-radius: var(–radius);
-padding: 20px;
-margin-bottom: 16px;
-box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-}
-.card-title {
-font-size: 13px; font-weight: 600;
-color: var(–muted); text-transform: uppercase;
-letter-spacing: .05em; margin-bottom: 14px;
-}
+/* Card */
+.card { background: var(–card); border-radius: var(–radius); padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-title { font-size: 13px; font-weight: 600; color: var(–muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
 
-.btn {
-display: block; width: 100%;
-padding: 15px; border: none;
-border-radius: 12px; font-size: 16px;
-font-weight: 600; cursor: pointer;
-transition: opacity .15s, transform .1s;
-text-align: center;
-}
+/* Buttons */
+.btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .1s; text-align: center; }
 .btn:active { opacity: .85; transform: scale(.98); }
 .btn-primary { background: var(–primary); color: white; }
 .btn-success { background: var(–success); color: white; }
-.btn-outline {
-background: transparent;
-border: 2px solid var(–border); color: var(–text);
-}
+.btn-outline { background: transparent; border: 2px solid var(–border); color: var(–text); }
 .btn + .btn { margin-top: 10px; }
 
-.user-item {
-display: flex; align-items: center;
-justify-content: space-between;
-padding: 14px 16px;
-border: 2px solid var(–border);
-border-radius: 12px; margin-bottom: 10px;
-cursor: pointer;
-transition: border-color .15s, background .15s;
-}
-.user-item:hover, .user-item.selected {
-border-color: var(–primary); background: #eff6ff;
-}
-.user-avatar {
-width: 40px; height: 40px; border-radius: 50%;
-background: var(–primary); color: white;
-font-size: 18px; font-weight: 700;
-display: flex; align-items: center; justify-content: center;
-margin-right: 12px; flex-shrink: 0;
-}
+/* User list */
+.user-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 2px solid var(–border); border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s, background .15s; }
+.user-item.selected { border-color: var(–primary); background: #eff6ff; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(–primary); color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
 .user-name { font-size: 16px; font-weight: 600; }
 .user-meta { font-size: 12px; color: var(–muted); margin-top: 2px; }
-.user-del {
-background: none; border: none;
-color: var(–danger); font-size: 20px;
-cursor: pointer; padding: 4px 8px;
-}
+.user-del { background: none; border: none; color: var(–danger); font-size: 20px; cursor: pointer; padding: 4px 8px; }
 
+/* Input */
 .input-row { display: flex; gap: 10px; margin-top: 12px; }
-input[type=“text”] {
-flex: 1; padding: 13px 14px;
-border: 2px solid var(–border);
-border-radius: 12px; font-size: 15px;
-outline: none; transition: border-color .15s;
-}
+input[type=“text”] { flex: 1; padding: 13px 14px; border: 2px solid var(–border); border-radius: 12px; font-size: 15px; outline: none; transition: border-color .15s; }
 input[type=“text”]:focus { border-color: var(–primary); }
-.input-btn {
-padding: 13px 18px; background: var(–primary);
-color: white; border: none; border-radius: 12px;
-font-size: 15px; font-weight: 600; cursor: pointer;
-}
+.input-btn { padding: 13px 18px; background: var(–primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
 
-#qr-video-wrap {
-position: relative; border-radius: 14px;
-overflow: hidden; background: #000;
-aspect-ratio: 1; margin-bottom: 16px;
-}
+/* QR Scanner */
+#qr-video-wrap { position: relative; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 1; margin-bottom: 16px; }
 #qr-video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.scan-overlay {
-position: absolute; inset: 0;
-display: flex; align-items: center; justify-content: center;
-pointer-events: none;
-}
-.scan-frame {
-width: 60%; aspect-ratio: 1;
-border: 3px solid white; border-radius: 12px;
-box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
-}
-.scan-line {
-position: absolute; width: 60%; height: 2px;
-background: #22d3ee; animation: scanAnim 2s linear infinite;
-box-shadow: 0 0 8px #22d3ee;
-}
+.scan-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.scan-frame { width: 60%; aspect-ratio: 1; border: 3px solid white; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
+.scan-line { position: absolute; width: 60%; height: 2px; background: #22d3ee; animation: scanAnim 2s linear infinite; box-shadow: 0 0 8px #22d3ee; }
 @keyframes scanAnim { 0%{top:20%} 100%{top:80%} }
-
-.qr-result {
-background: #f0fdf4; border: 2px solid #86efac;
-border-radius: 12px; padding: 14px 16px;
-margin-bottom: 14px; display: none;
-}
+.qr-result { background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; display: none; }
 .qr-result.show { display: block; }
 .qr-result-label { font-size: 12px; color: var(–success); font-weight: 600; margin-bottom: 4px; }
 .qr-result-code { font-size: 16px; font-weight: 700; word-break: break-all; }
 
-.info-row {
-display: flex; justify-content: space-between;
-padding: 10px 0; border-bottom: 1px solid var(–border); font-size: 14px;
-}
+/* Info rows */
+.info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(–border); font-size: 14px; }
 .info-row:last-child { border-bottom: none; }
 .info-label { color: var(–muted); }
 .info-value { font-weight: 600; text-align: right; max-width: 60%; word-break: break-all; }
 
-/* 全螢幕錄影 */
-#rec-fullscreen {
-position: relative;
-width: 100vw;
-height: 100vh;
-background: #000;
-overflow: hidden;
-}
-#rec-video {
-position: absolute; inset: 0;
-width: 100%; height: 100%;
-object-fit: cover;
-}
-#rec-ui {
-position: absolute; inset: 0;
-display: flex; flex-direction: column;
-justify-content: space-between;
-padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 30px);
-z-index: 10;
-}
-#rec-top {
-display: flex; align-items: center;
-justify-content: space-between; padding-top: 10px;
-}
-.rec-indicator {
-display: none; align-items: center; gap: 6px;
-background: rgba(220,38,38,0.85); color: white;
-font-size: 13px; font-weight: 700;
-padding: 5px 12px; border-radius: 20px;
-backdrop-filter: blur(4px);
-}
+/* Fullscreen Record */
+#rec-fullscreen { position: relative; width: 100vw; height: 100vh; background: #000; overflow: hidden; }
+#rec-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#rec-ui { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 30px); z-index: 10; }
+#rec-top { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; }
+.rec-indicator { display: none; align-items: center; gap: 6px; background: rgba(220,38,38,0.85); color: white; font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(4px); }
 .rec-indicator.show { display: flex; }
 .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: white; animation: blink 1s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+#rec-timer-display { color: white; font-size: 16px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+#rec-qr-top { color: white; font-size: 12px; font-weight: 600; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 20px; backdrop-filter: blur(4px); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-#rec-timer-display {
-color: white; font-size: 16px; font-weight: 700;
-text-shadow: 0 1px 4px rgba(0,0,0,0.6);
-}
-#rec-qr-top {
-color: white; font-size: 12px; font-weight: 600;
-background: rgba(0,0,0,0.4); padding: 4px 10px;
-border-radius: 20px; backdrop-filter: blur(4px);
-max-width: 150px; overflow: hidden;
-text-overflow: ellipsis; white-space: nowrap;
-}
-#rec-bottom {
-display: flex; align-items: center;
-justify-content: space-around; padding-bottom: 10px;
-}
-.flip-btn {
-width: 56px; height: 56px; border-radius: 50%;
-background: rgba(255,255,255,0.2);
-border: 2px solid rgba(255,255,255,0.5);
-color: white; font-size: 26px;
-display: flex; align-items: center; justify-content: center;
-cursor: pointer; backdrop-filter: blur(4px);
-}
+/* Settings overlay */
+#rec-settings { display: flex; justify-content: center; gap: 8px; padding: 8px 0; }
+.setting-btn { background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); }
+.setting-btn.active { background: rgba(37,99,235,0.8); border-color: rgba(37,99,235,0.9); }
+
+#rec-bottom { display: flex; align-items: center; justify-content: space-around; padding-bottom: 10px; }
+.flip-btn { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); color: white; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(4px); }
 .flip-btn:active { background: rgba(255,255,255,0.4); }
-.rec-shutter {
-width: 84px; height: 84px; border-radius: 50%;
-background: white; border: 4px solid rgba(255,255,255,0.5);
-display: flex; align-items: center; justify-content: center;
-cursor: pointer; transition: transform .1s;
-box-shadow: 0 0 0 4px rgba(255,255,255,0.25);
-}
+.rec-shutter { width: 84px; height: 84px; border-radius: 50%; background: white; border: 4px solid rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .1s; box-shadow: 0 0 0 4px rgba(255,255,255,0.25); }
 .rec-shutter:active { transform: scale(.93); }
-.rec-shutter-inner {
-width: 58px; height: 58px; border-radius: 50%;
-background: var(–danger);
-transition: border-radius .2s, width .2s, height .2s;
-}
-.rec-shutter-inner.recording {
-border-radius: 10px; width: 32px; height: 32px;
-}
-.cancel-btn {
-width: 56px; height: 56px; border-radius: 50%;
-background: rgba(255,255,255,0.2);
-border: 2px solid rgba(255,255,255,0.5);
-color: white; font-size: 13px; font-weight: 600;
-display: flex; align-items: center; justify-content: center;
-cursor: pointer; backdrop-filter: blur(4px);
-}
+.rec-shutter-inner { width: 58px; height: 58px; border-radius: 50%; background: var(–danger); transition: border-radius .2s, width .2s, height .2s; }
+.rec-shutter-inner.recording { border-radius: 10px; width: 32px; height: 32px; }
+.cancel-btn { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); color: white; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(4px); }
 .cancel-btn:active { background: rgba(255,255,255,0.4); }
 
-/* 上傳佇列 */
-#upload-queue-btn {
-position: fixed; top: 16px; right: 16px;
-background: var(–warn); color: white;
-border: none; border-radius: 20px;
-padding: 8px 14px; font-size: 13px; font-weight: 700;
-cursor: pointer; z-index: 999;
-display: none; align-items: center; gap: 6px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+/* Upload queue */
+#upload-queue-btn { position: fixed; top: 16px; right: 16px; background: var(–warn); color: white; border: none; border-radius: 20px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 999; display: none; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 #upload-queue-btn.show { display: flex; }
-#upload-panel {
-position: fixed; inset: 0;
-background: rgba(0,0,0,0.5);
-z-index: 998; display: none; align-items: flex-end;
-}
+#upload-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; display: none; align-items: flex-end; }
 #upload-panel.show { display: flex; }
-#upload-panel-inner {
-background: white; width: 100%;
-border-radius: 20px 20px 0 0;
-padding: 20px; max-height: 60vh; overflow-y: auto;
-}
-#upload-panel-title {
-font-size: 16px; font-weight: 700; margin-bottom: 16px;
-display: flex; justify-content: space-between;
-}
-.upload-item {
-display: flex; align-items: center; gap: 12px;
-padding: 12px 0; border-bottom: 1px solid var(–border);
-}
+#upload-panel-inner { background: white; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; max-height: 60vh; overflow-y: auto; }
+#upload-panel-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; }
+.upload-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(–border); }
 .upload-item:last-child { border-bottom: none; }
 .upload-item-info { flex: 1; }
 .upload-item-name { font-size: 14px; font-weight: 600; }
 .upload-item-status { font-size: 12px; color: var(–muted); margin-top: 2px; }
-.upload-item-bar {
-height: 4px; background: var(–border);
-border-radius: 99px; margin-top: 6px; overflow: hidden;
-}
-.upload-item-bar-fill {
-height: 100%; background: var(–primary);
-border-radius: 99px; transition: width .3s;
-}
+.upload-item-bar { height: 4px; background: var(–border); border-radius: 99px; margin-top: 6px; overflow: hidden; }
+.upload-item-bar-fill { height: 100%; background: var(–primary); border-radius: 99px; transition: width .3s; }
 .upload-status-icon { font-size: 20px; }
 
 .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.api-warning { background: #fef3c7; border: 2px solid #fcd34d; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+.api-warning strong { color: var(–warn); }
 
-#toast {
-position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-background: #1e293b; color: white;
-padding: 12px 22px; border-radius: 12px;
-font-size: 14px; font-weight: 500;
-opacity: 0; pointer-events: none; transition: opacity .3s;
-z-index: 9999; white-space: nowrap; max-width: 90vw;
-}
+#toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 22px; border-radius: 12px; font-size: 14px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 9999; white-space: nowrap; max-width: 90vw; }
 #toast.show { opacity: 1; }
 
-.nav {
-position: fixed; bottom: 0; left: 0; right: 0;
-background: white; border-top: 1px solid var(–border);
-display: flex; padding-bottom: env(safe-area-inset-bottom);
-z-index: 100;
-}
-.nav-btn {
-flex: 1; padding: 12px 0; border: none; background: none;
-display: flex; flex-direction: column; align-items: center; gap: 3px;
-font-size: 10px; color: var(–muted); cursor: pointer;
-}
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(–border); display: flex; padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
+.nav-btn { flex: 1; padding: 12px 0; border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(–muted); cursor: pointer; }
 .nav-btn.active { color: var(–primary); }
 .nav-btn span { font-size: 22px; }
-
-.api-warning {
-background: #fef3c7; border: 2px solid #fcd34d;
-border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
-font-size: 13px; line-height: 1.6;
-}
-.api-warning strong { color: var(–warn); }
 </style>
 
 </head>
@@ -326,14 +138,18 @@ font-size: 13px; line-height: 1.6;
 <div class="header">
 <div class="header-icon">📦</div>
 <div>
-<h1>出貨掃描系統</h1>
+<h1>Tiny 出貨系統</h1>
 <p id="header-user">請先選擇使用者</p>
 </div>
 </div>
 
+<!-- 上傳佇列按鈕 -->
+
 <button id="upload-queue-btn" onclick="toggleUploadPanel()">
 ⬆️ <span id="upload-queue-count">0</span> 個上傳中
 </button>
+
+<!-- 上傳佇列面板 -->
 
 <div id="upload-panel" onclick="closeUploadPanel(event)">
 <div id="upload-panel-inner">
@@ -345,7 +161,7 @@ font-size: 13px; line-height: 1.6;
 </div>
 </div>
 
-<!-- Screen 1: 使用者 -->
+<!-- ══ Screen 1: 使用者 ══ -->
 
 <div class="screen active" id="screen-users">
 <div class="card" style="margin-top:16px">
@@ -359,9 +175,8 @@ font-size: 13px; line-height: 1.6;
 
 <div class="card" id="api-setup-card">
 <div class="card-title">⚙️ API 設定</div>
-<div class="api-warning">
-<strong>首次使用需設定</strong><br>
-請填入你的 Google Apps Script 部署網址
+<div class="api-warning" id="api-warning-box">
+<strong>首次使用需設定</strong><br>請填入 Google Apps Script 部署網址
 </div>
 <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom:10px" />
 <button class="btn btn-primary" onclick="saveApiUrl()">儲存 API 網址</button>
@@ -371,7 +186,7 @@ font-size: 13px; line-height: 1.6;
 
 </div>
 
-<!-- Screen 2: QR 掃描 -->
+<!-- ══ Screen 2: QR 掃描 ══ -->
 
 <div class="screen" id="screen-scan">
 <div style="margin-top:16px">
@@ -382,52 +197,40 @@ font-size: 13px; line-height: 1.6;
 <div class="scan-line"></div>
 </div>
 </div>
-
-```
 <div class="qr-result" id="qr-result">
 <div class="qr-result-label">✅ 掃描成功</div>
 <div class="qr-result-code" id="qr-code-display"></div>
 </div>
-
 <div class="card">
-<div class="info-row">
-<span class="info-label">使用者</span>
-<span class="info-value" id="scan-user-display">—</span>
+<div class="info-row"><span class="info-label">使用者</span><span class="info-value" id="scan-user-display">—</span></div>
+<div class="info-row"><span class="info-label">貨物編號</span><span class="info-value" id="scan-qr-display">等待掃描…</span></div>
+<div class="info-row"><span class="info-label">時間</span><span class="info-value" id="scan-time-display">—</span></div>
 </div>
-<div class="info-row">
-<span class="info-label">貨物編號</span>
-<span class="info-value" id="scan-qr-display">等待掃描…</span>
-</div>
-<div class="info-row">
-<span class="info-label">時間</span>
-<span class="info-value" id="scan-time-display">—</span>
+<button class="btn btn-success" id="btn-confirm-scan" onclick="confirmScan()" disabled>✅ 確認並前往錄影</button>
+<button class="btn btn-outline" onclick="resetScan()" style="margin-top:10px;margin-bottom:80px">重新掃描</button>
 </div>
 </div>
 
-<button class="btn btn-success" id="btn-confirm-scan" onclick="confirmScan()" disabled>
-✅ 確認並前往錄影
-</button>
-<button class="btn btn-outline" onclick="resetScan()" style="margin-top:10px;margin-bottom:80px">
-重新掃描
-</button>
-```
-
-</div>
-</div>
-
-<!-- Screen 3: 全螢幕錄影 -->
+<!-- ══ Screen 3: 全螢幕錄影 ══ -->
 
 <div class="screen" id="screen-record">
 <div id="rec-fullscreen">
 <video id="rec-video" autoplay playsinline muted></video>
 <div id="rec-ui">
+<!-- 頂部 -->
 <div id="rec-top">
-<div class="rec-indicator" id="rec-indicator">
-<div class="rec-dot"></div> 錄影中
-</div>
+<div class="rec-indicator" id="rec-indicator"><div class="rec-dot"></div> 錄影中</div>
 <div id="rec-timer-display">00:00</div>
 <div id="rec-qr-top">—</div>
 </div>
+<!-- 畫質/幀率選項 -->
+<div id="rec-settings">
+<button class="setting-btn active" id="btn-720p" onclick="setQuality('720p')">720p</button>
+<button class="setting-btn" id="btn-1080p" onclick="setQuality('1080p')">1080p</button>
+<button class="setting-btn active" id="btn-30fps" onclick="setFps(30)">30fps</button>
+<button class="setting-btn" id="btn-60fps" onclick="setFps(60)">60fps</button>
+</div>
+<!-- 底部控制 -->
 <div id="rec-bottom">
 <div class="cancel-btn" onclick="cancelRecord()">取消</div>
 <div class="rec-shutter" onclick="toggleRecording()">
@@ -439,40 +242,24 @@ font-size: 13px; line-height: 1.6;
 </div>
 </div>
 
-<!-- Screen 4: 完成 -->
+<!-- ══ Screen 4: 完成 ══ -->
 
 <div class="screen" id="screen-done">
 <div style="margin-top:40px; text-align:center; padding: 0 20px">
 <div style="font-size:72px;margin-bottom:16px">✅</div>
 <h2 style="font-size:24px;margin-bottom:8px">已記錄！</h2>
-<p style="color:var(--muted);margin-bottom:4px">影片上傳在背景進行中</p>
-<p style="color:var(--muted);font-size:13px;margin-bottom:32px">可點右上角查看進度</p>
-
-```
+<p style="color:var(--muted);margin-bottom:4px">影片上傳在背景進行</p>
+<p style="color:var(--muted);font-size:13px;margin-bottom:32px">點右上角查看進度</p>
 <div class="card" style="text-align:left">
-<div class="info-row">
-<span class="info-label">貨物編號</span>
-<span class="info-value" id="done-qr">—</span>
-</div>
-<div class="info-row">
-<span class="info-label">使用者</span>
-<span class="info-value" id="done-user">—</span>
-</div>
-<div class="info-row">
-<span class="info-label">時間</span>
-<span class="info-value" id="done-time">—</span>
-</div>
+<div class="info-row"><span class="info-label">貨物編號</span><span class="info-value" id="done-qr">—</span></div>
+<div class="info-row"><span class="info-label">使用者</span><span class="info-value" id="done-user">—</span></div>
+<div class="info-row"><span class="info-label">時間</span><span class="info-value" id="done-time">—</span></div>
 <div class="info-row">
 <span class="info-label">影片</span>
 <span class="info-value"><span class="badge" id="done-video-badge" style="background:#fef3c7;color:#d97706">上傳中…</span></span>
 </div>
 </div>
-
-<button class="btn btn-primary" onclick="startOver()" style="margin-bottom:80px">
-繼續下一包 →
-</button>
-```
-
+<button class="btn btn-primary" onclick="startOver()" style="margin-bottom:80px">繼續下一包 →</button>
 </div>
 </div>
 
@@ -481,21 +268,24 @@ font-size: 13px; line-height: 1.6;
 <button class="nav-btn" id="nav-scan" onclick="showScreen('scan')"><span>📷</span>掃描</button>
 <button class="nav-btn" id="nav-record" onclick="showScreen('record')"><span>🎬</span>錄影</button>
 </nav>
-
 <div id="toast"></div>
 
 <script>
+// ══ 狀態 ══
 let state = {
-currentUser: null,
+currentUser: localStorage.getItem("currentUser") || null,
 scannedCode: null,
 scannedTime: null,
 currentRowId: null,
 apiUrl: localStorage.getItem("apiUrl") || "",
 facingMode: "environment",
+quality: "720p", // 720p | 1080p
+fps: 30, // 30 | 60
 };
 
 let uploadQueue = [];
 
+// ══ Toast ══
 function toast(msg, duration = 2500) {
 const el = document.getElementById("toast");
 el.textContent = msg;
@@ -503,6 +293,7 @@ el.classList.add("show");
 setTimeout(() => el.classList.remove("show"), duration);
 }
 
+// ══ 畫面切換 ══
 function showScreen(name) {
 document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
 document.getElementById("screen-" + name).classList.add("active");
@@ -514,6 +305,7 @@ if (name === "scan") initQRScanner();
 if (name === "record") initRecordCamera();
 }
 
+// ══ 使用者 ══
 function getUsers() { return JSON.parse(localStorage.getItem("users") || "[]"); }
 function saveUsers(u) { localStorage.setItem("users", JSON.stringify(u)); }
 
@@ -570,6 +362,7 @@ if (!confirm(`確定刪除「${name}」？`)) return;
 saveUsers(getUsers().filter(u => u !== name));
 if (state.currentUser === name) {
 state.currentUser = null;
+localStorage.removeItem("currentUser");
 document.getElementById("header-user").textContent = "請先選擇使用者";
 }
 renderUsers();
@@ -581,15 +374,17 @@ if (!state.apiUrl) return toast("⚠️ 請先設定 API 網址");
 showScreen("scan");
 }
 
+// ══ API 設定 ══
 function saveApiUrl() {
 const url = document.getElementById("api-url-input").value.trim();
 if (!url.startsWith("https://")) return toast("請輸入正確的 https:// 網址");
 state.apiUrl = url;
 localStorage.setItem("apiUrl", url);
 toast("✅ API 網址已儲存");
-document.getElementById("api-setup-card").style.opacity = "0.6";
+document.getElementById("api-warning-box").style.display = "none";
 }
 
+// ══ QR 掃描 ══
 let qrStream = null, qrInterval = null, qrDetected = false;
 
 async function initQRScanner() {
@@ -610,8 +405,7 @@ const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 qrInterval = setInterval(() => {
 if (qrDetected || video.readyState !== video.HAVE_ENOUGH_DATA) return;
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
+canvas.width = video.videoWidth; canvas.height = video.videoHeight;
 ctx.drawImage(video, 0, 0);
 const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
 if (code) { qrDetected = true; onQRDetected(code.data); }
@@ -647,13 +441,7 @@ toast("正在記錄到 Google Sheet…");
 try {
 const res = await fetch(state.apiUrl, {
 method: "POST",
-body: JSON.stringify({
-action: "addRecord",
-user: state.currentUser,
-qrCode: state.scannedCode,
-timestamp: state.scannedTime,
-rowId: state.currentRowId,
-}),
+body: JSON.stringify({ action: "addRecord", user: state.currentUser, qrCode: state.scannedCode, timestamp: state.scannedTime, rowId: state.currentRowId }),
 });
 const data = await res.json();
 if (!data.success) throw new Error(data.error);
@@ -669,16 +457,35 @@ clearInterval(qrInterval);
 if (qrStream) { qrStream.getTracks().forEach(t => t.stop()); qrStream = null; }
 }
 
+// ══ 錄影設定 ══
+function setQuality(q) {
+state.quality = q;
+document.getElementById("btn-720p").classList.toggle("active", q === "720p");
+document.getElementById("btn-1080p").classList.toggle("active", q === "1080p");
+if (!isRecording) initRecordCamera();
+}
+
+function setFps(fps) {
+state.fps = fps;
+document.getElementById("btn-30fps").classList.toggle("active", fps === 30);
+document.getElementById("btn-60fps").classList.toggle("active", fps === 60);
+if (!isRecording) initRecordCamera();
+}
+
+// ══ 錄影 ══
 let recStream = null, mediaRecorder = null, recChunks = [];
 let recTimerInterval = null, recSeconds = 0, isRecording = false;
+
+function getVideoConstraints() {
+const h = state.quality === "1080p" ? 1080 : 720;
+const w = state.quality === "1080p" ? 1920 : 1280;
+return { facingMode: state.facingMode, width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: state.fps } };
+}
 
 async function initRecordCamera() {
 try {
 if (recStream) recStream.getTracks().forEach(t => t.stop());
-recStream = await navigator.mediaDevices.getUserMedia({
-video: { facingMode: state.facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
-audio: true,
-});
+recStream = await navigator.mediaDevices.getUserMedia({ video: getVideoConstraints(), audio: true });
 const video = document.getElementById("rec-video");
 video.srcObject = recStream;
 video.play();
@@ -700,6 +507,9 @@ function startRecording() {
 if (!recStream) return toast("相機未就緒");
 recChunks = []; recSeconds = 0; isRecording = true;
 document.getElementById("rec-timer-display").textContent = "00:00";
+// 錄影中不讓切換設定
+document.querySelectorAll(".setting-btn").forEach(b => b.style.opacity = "0.4");
+
 const mimeType = MediaRecorder.isTypeSupported("video/mp4") ? "video/mp4"
 : MediaRecorder.isTypeSupported("video/webm;codecs=vp8") ? "video/webm;codecs=vp8"
 : "video/webm";
@@ -722,63 +532,80 @@ isRecording = false;
 clearInterval(recTimerInterval);
 document.getElementById("rec-indicator").classList.remove("show");
 document.getElementById("rec-shutter-inner").classList.remove("recording");
+document.querySelectorAll(".setting-btn").forEach(b => b.style.opacity = "1");
 if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
 }
 
-function handleRecordingStop() {
+async function handleRecordingStop() {
 const mimeType = recChunks[0]?.type || "video/mp4";
 const ext = mimeType.includes("mp4") ? "mp4" : "webm";
 const blob = new Blob(recChunks, { type: mimeType });
 
-const job = {
-id: state.currentRowId,
-qrCode: state.scannedCode,
-status: "uploading",
-progress: 0,
-blob, mimeType, ext,
-};
+const job = { id: state.currentRowId, qrCode: state.scannedCode, status: "uploading", progress: 0, blob, mimeType, ext };
 uploadQueue.push(job);
 updateUploadQueueUI();
 uploadInBackground(job);
 
+// 立刻跳完成畫面
 document.getElementById("done-qr").textContent = state.scannedCode;
 document.getElementById("done-user").textContent = state.currentUser;
 document.getElementById("done-time").textContent = state.scannedTime;
 const badge = document.getElementById("done-video-badge");
-badge.textContent = "上傳中…";
-badge.style.background = "#fef3c7";
-badge.style.color = "#d97706";
+badge.textContent = "上傳中…"; badge.style.background = "#fef3c7"; badge.style.color = "#d97706";
 
 stopRecordStream();
 showScreen("done");
 }
 
+// ══ 分塊上傳 ══
+const CHUNK_SIZE = 700 * 1024; // 700KB per chunk (Apps Script limit safe)
+
 async function uploadInBackground(job) {
 try {
-job.progress = 10; updateUploadQueueUI();
 const arrayBuffer = await job.blob.arrayBuffer();
 const bytes = new Uint8Array(arrayBuffer);
-let binary = "";
-const chunkSize = 8192;
-for (let i = 0; i < bytes.length; i += chunkSize)
-binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
-const base64 = btoa(binary);
-job.progress = 40; updateUploadQueueUI();
 
-const res = await fetch(state.apiUrl, {
+// 切成小塊
+const chunks = [];
+for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+const slice = bytes.subarray(i, i + CHUNK_SIZE);
+let binary = "";
+for (let j = 0; j < slice.length; j++) binary += String.fromCharCode(slice[j]);
+chunks.push(btoa(binary));
+}
+
+const totalChunks = chunks.length;
+job.progress = 5; updateUploadQueueUI();
+
+// 逐塊上傳
+for (let i = 0; i < totalChunks; i++) {
+const res = await fetch(job.apiUrl || state.apiUrl, {
 method: "POST",
 body: JSON.stringify({
-action: "uploadVideo",
-videoBase64: base64,
+action: "uploadChunk",
+rowId: job.id,
+chunkIndex: i,
+totalChunks,
+chunkData: chunks[i],
 mimeType: job.mimeType,
 qrCode: job.qrCode,
 ext: job.ext,
-rowId: job.id,
 }),
 });
-job.progress = 90; updateUploadQueueUI();
 const data = await res.json();
 if (!data.success) throw new Error(data.error);
+job.progress = Math.round(5 + (i + 1) / totalChunks * 85);
+updateUploadQueueUI();
+}
+
+// 組合
+job.progress = 92; updateUploadQueueUI();
+const finalRes = await fetch(state.apiUrl, {
+method: "POST",
+body: JSON.stringify({ action: "finalizeUpload", rowId: job.id }),
+});
+const finalData = await finalRes.json();
+if (!finalData.success) throw new Error(finalData.error);
 
 job.status = "done"; job.progress = 100;
 updateUploadQueueUI();
@@ -786,13 +613,11 @@ toast("✅ " + job.qrCode + " 上傳完成！");
 
 if (document.getElementById("done-qr").textContent === job.qrCode) {
 const badge = document.getElementById("done-video-badge");
-badge.textContent = "已上傳 ✅";
-badge.style.background = "#dcfce7";
-badge.style.color = "#16a34a";
+badge.textContent = "已上傳 ✅"; badge.style.background = "#dcfce7"; badge.style.color = "#16a34a";
 }
 } catch(err) {
 job.status = "error"; updateUploadQueueUI();
-toast("❌ " + job.qrCode + " 上傳失敗");
+toast("❌ " + job.qrCode + " 上傳失敗：" + err.message);
 }
 }
 
@@ -801,14 +626,11 @@ const active = uploadQueue.filter(j => j.status === "uploading");
 const btn = document.getElementById("upload-queue-btn");
 document.getElementById("upload-queue-count").textContent = active.length;
 btn.classList.toggle("show", uploadQueue.length > 0);
-
 const list = document.getElementById("upload-list");
 list.innerHTML = "";
 [...uploadQueue].reverse().forEach(job => {
 const icon = job.status === "done" ? "✅" : job.status === "error" ? "❌" : "⬆️";
-const statusText = job.status === "done" ? "上傳完成"
-: job.status === "error" ? "上傳失敗"
-: `上傳中 ${job.progress}%`;
+const statusText = job.status === "done" ? "上傳完成" : job.status === "error" ? "上傳失敗" : `上傳中 ${job.progress}%`;
 const div = document.createElement("div");
 div.className = "upload-item";
 div.innerHTML = `
@@ -822,16 +644,9 @@ list.appendChild(div);
 });
 }
 
-function toggleUploadPanel() {
-document.getElementById("upload-panel").classList.toggle("show");
-}
-function closeUploadPanel(e) {
-if (e.target === document.getElementById("upload-panel")) toggleUploadPanel();
-}
-
-function stopRecordStream() {
-if (recStream) { recStream.getTracks().forEach(t => t.stop()); recStream = null; }
-}
+function toggleUploadPanel() { document.getElementById("upload-panel").classList.toggle("show"); }
+function closeUploadPanel(e) { if (e.target === document.getElementById("upload-panel")) toggleUploadPanel(); }
+function stopRecordStream() { if (recStream) { recStream.getTracks().forEach(t => t.stop()); recStream = null; } }
 
 function cancelRecord() {
 if (isRecording) stopRecording();
@@ -844,32 +659,26 @@ initQRScanner();
 }
 
 function startOver() {
-state.scannedCode = null;
-state.scannedTime = null;
-state.currentRowId = null;
-showScreen("scan");
-resetScan();
-initQRScanner();
+state.scannedCode = null; state.scannedTime = null; state.currentRowId = null;
+showScreen("scan"); resetScan(); initQRScanner();
 }
 
 function loadScript(src) {
 return new Promise((res, rej) => {
 const s = document.createElement("script");
-s.src = src; s.onload = res; s.onerror = rej;
-document.head.appendChild(s);
+s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s);
 });
 }
 
+// ══ 初始化 ══
 (function init() {
-const savedUser = localStorage.getItem("currentUser");
-if (savedUser) {
-state.currentUser = savedUser;
-document.getElementById("header-user").textContent = "使用者：" + savedUser;
-document.getElementById("scan-user-display").textContent = savedUser;
+if (state.currentUser) {
+document.getElementById("header-user").textContent = "使用者：" + state.currentUser;
+document.getElementById("scan-user-display").textContent = state.currentUser;
 }
 if (state.apiUrl) {
 document.getElementById("api-url-input").value = state.apiUrl;
-document.getElementById("api-setup-card").style.opacity = "0.6";
+document.getElementById("api-warning-box").style.display = "none";
 }
 renderUsers();
 })();
